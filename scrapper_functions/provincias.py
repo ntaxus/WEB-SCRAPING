@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+import pandas as pd
 
 
 def str_to_int(str):
@@ -15,20 +16,23 @@ def str_to_int(str):
 def str_to_float(str):
     '''
     Reemplaza separador decimal a punto y convierte a float
+
     :param str:
     :return: float
     '''
 
-    return float(str.replace(",", "."))
+    return round(float(str.replace(",", ".")), 2)
 
 
 def get_lista_provincias():
     '''
     Obtiene información básica de las provincias de Argentina.
-    :return: diccionario con clave por provincia y valor diccionario datos básicos.
+
+    :return: dataframe con la información de cada provincia.
     '''
 
-    provincias = dict()
+    provincias = pd.DataFrame(columns=["provincia", "url", "poblacion",
+                                       "superficie", "densidad", "capital"])
 
     try:
         # Ruta del driver
@@ -44,20 +48,24 @@ def get_lista_provincias():
         for row in rows:
             # Columnas por fila
             cols = row.find_elements_by_tag_name("td")
+
             provincia = cols[0].text
             poblacion = str_to_int(cols[3].text)
             superficie = str_to_int(cols[5].text)
             densidad = str_to_float(cols[7].text)
             capital = cols[8].text
-
             enlace = row.find_element_by_tag_name("a").get_attribute("href")
-            provincias[provincia] = {"url": enlace,
-                                     "poblacion": poblacion,
-                                     "superficie": superficie,
-                                     "densidad": densidad,
-                                     "capital": capital}
+
+            provincias = provincias.append({"provincia": provincia,
+                                            "url": enlace,
+                                            "superficie": superficie,
+                                            "poblacion": poblacion,
+                                            "densidad": densidad,
+                                            "capital": capital}, ignore_index=True)
+
+        return provincias
 
     except NoSuchElementException:
-        print("Error no se encuentra elemento")
+        print("Error no se encuentra tabla provincias")
 
-    return provincias
+
