@@ -24,6 +24,30 @@ def str_to_float(str):
     return round(float(str.replace(",", ".")), 2)
 
 
+def get_detalle_provincia(url = "https://es.wikipedia.org/wiki/Provincia_de_Buenos_Aires"):
+    '''
+    Scrapper información detallada de la provincia
+
+    :param url: enlace wikipedia página de la provincia
+    :return:
+    '''
+
+    driver = webdriver.Chrome('chromedriver.exe')
+    driver.get(url)
+
+    tabla_detalle = driver.find_element_by_class_name("infobox.geography.vcard")
+    cuerpo_tabla_detalle = tabla_detalle.find_element_by_tag_name("tbody")
+    rows = cuerpo_tabla_detalle.find_elements_by_tag_name('tr')
+
+    for row in rows:
+        try:
+            clave = row.find_elements_by_tag_name("th")
+            valor = row.find_elements_by_tag_name("td")
+            print(clave[0].text, "--->", valor[0].text)
+        except:
+            print("nothing to show here")
+
+
 def get_lista_provincias():
     '''
     Obtiene información básica de las provincias de Argentina.
