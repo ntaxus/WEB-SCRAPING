@@ -24,13 +24,17 @@ def str_to_float(str):
     return round(float(str.replace(",", ".")), 2)
 
 
-def get_detalle_provincia(url = "https://es.wikipedia.org/wiki/Provincia_de_Buenos_Aires"):
+def get_detalle_provincia(url = "https://es.wikipedia.org/wiki/Provincia_de_Buenos_Aires", verbose=False):
     '''
     Scrapper información detallada de la provincia
 
+    :type verbose: Bool, si True imprime mensajes por pantalla
     :param url: enlace wikipedia página de la provincia
-    :return:
+    :return: dict con información de detalle de la provincia
     '''
+
+    # DataFrame datos provincias
+    data_provincia = dict()
 
     driver = webdriver.Chrome('chromedriver.exe')
     driver.get(url)
@@ -41,11 +45,14 @@ def get_detalle_provincia(url = "https://es.wikipedia.org/wiki/Provincia_de_Buen
 
     for row in rows:
         try:
-            clave = row.find_elements_by_tag_name("th")
-            valor = row.find_elements_by_tag_name("td")
-            print(clave[0].text, "--->", valor[0].text)
+            clave = str.strip(row.find_elements_by_tag_name("th")[0].text)
+            valor = str.strip(row.find_elements_by_tag_name("td")[0].text)
+            data_provincia[clave] = valor
+            print(clave, "--->", valor) if verbose else None
         except:
-            print("nothing to show here")
+            print("nothing to show here") if verbose else None
+
+    return data_provincia
 
 
 def get_lista_provincias():
