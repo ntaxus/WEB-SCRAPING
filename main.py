@@ -29,4 +29,4 @@ if not provincias_arg.empty:  # Se ha logrado obtener detalle de provincias
         time.sleep(5)
 
     print(provincias_arg.head())
-    provincias_arg.to_csv("./datasets/provincias_argentia.csv", index=False)
+    provincias_arg.to_csv("./datasets/provincias_argentina.csv", index=False)
