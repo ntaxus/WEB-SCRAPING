@@ -4,28 +4,29 @@ import time
 # Obtenemos listado de provincias
 provincias_arg = provincias.get_lista_provincias()
 
-# Atributos a añadir del detalle provincia
-provincias_arg["IDH"] = None
-provincias_arg["analfabetismo"] = None
+if not provincias_arg.empty:  # Se ha logrado obtener detalle de provincias
+    # Atributos a añadir del detalle provincia
+    provincias_arg["IDH"] = None
+    provincias_arg["analfabetismo"] = None
 
-# Obtener info detallada de cada provincia
-for index, provincia in provincias_arg.iterrows():
+    # Obtener info detallada de cada provincia
+    for index, provincia in provincias_arg.iterrows():
 
-    print(provincia["provincia"], index)
-    data_provincia = provincias.get_detalle_provincia(provincia['url'], verbose=False)
+        print(provincia["provincia"], index)
+        data_provincia = provincias.get_detalle_provincia(provincia['url'], verbose=False)
 
-    # TODO: pasar a función de la librería
-    try:
-        provincias_arg.loc[index, "IDH"] = data_provincia["IDH (2018)"]
-    except KeyError:
-        print("IDH no disponible") # El dato no está disponible en la web
+        # Enriquecer con información de tabla detalle cada provincia
+        provincias_arg = provincias.add_info_provincia(index, provincias_arg, data_provincia, "IDH", "IDH (2018)")
+        provincias_arg = provincias.add_info_provincia(index, provincias_arg, data_provincia, "analfabetismo", "Analfabetismo")
+        provincias_arg = provincias.add_info_provincia(index, provincias_arg, data_provincia, "porc_pobacion_argentina", "% de la población argentina")
+        provincias_arg = provincias.add_info_provincia(index, provincias_arg, data_provincia, "autonomía", "Declaración de autonomía")
+        provincias_arg = provincias.add_info_provincia(index, provincias_arg, data_provincia, "altitud media", "• Media")
+        provincias_arg = provincias.add_info_provincia(index, provincias_arg, data_provincia, "altitud maxima", "• Máxima")
+        provincias_arg = provincias.add_info_provincia(index, provincias_arg, data_provincia, "altitud minima", "• Mínima")
+        provincias_arg = provincias.add_info_provincia(index, provincias_arg, data_provincia, "coordenadas", "Coordenadas")
 
-    try:
-        provincias_arg.loc[index, "analfabetismo"] = data_provincia["Analfabetismo"]
-    except KeyError:
-        print("Analfabetismo no disponible") # El dato no está disponible en la web
+        # Esperar 5 segundo entre peticiones
+        time.sleep(5)
 
-    # Esperar 5 segundo entre peticiones
-    time.sleep(5)
-
-print(provincias_arg.head())
+    print(provincias_arg.head())
+    provincias_arg.to_csv("./datasets/provincias_argentia.csv", index=False)

@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 import pandas as pd
+import time
 
 
 def str_to_int(str):
@@ -97,6 +98,26 @@ def get_lista_provincias():
         return provincias
 
     except NoSuchElementException:
-        print("Error no se encuentra tabla provincias")
+        print("Error no se encuentra tabla provincias. Reintentando...")
+        time.sleep(3)
+        return get_lista_provincias()
 
 
+def add_info_provincia(index, provincias_arg, data_provincia, columna_df, columna_provincia, verbose=False):
+    '''
+    Añade información de provincia si está disponible del scrapping
+
+    :param index:
+    :param provincias_arg:
+    :param data_provincia:
+    :param columna_df:
+    :param columna_provincia:
+    :return: dataframe información provincias Argentina
+    '''
+    try:
+        provincias_arg.loc[index, columna_df] = data_provincia[columna_provincia]
+    except KeyError:
+        # El dato no está disponible en la web
+        print("{} no disponible".format(columna_provincia)) if verbose else None
+
+    return provincias_arg
