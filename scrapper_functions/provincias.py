@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 import pandas as pd
 import time
+import scrapper_functions
 
 
 def str_to_int(str):
@@ -37,7 +38,8 @@ def get_detalle_provincia(url = "https://es.wikipedia.org/wiki/Provincia_de_Buen
     # DataFrame datos provincias
     data_provincia = dict()
 
-    driver = webdriver.Chrome('chromedriver.exe')
+    # Inicializamos driver
+    driver = scrapper_functions.setup_driver()
     driver.get(url)
 
     tabla_detalle = driver.find_element_by_class_name("infobox.geography.vcard")
@@ -67,9 +69,8 @@ def get_lista_provincias():
                                        "superficie", "densidad", "capital"])
 
     try:
-        # Ruta del driver
-        driver = webdriver.Chrome('chromedriver.exe')
-        # Cargar web
+        # Inicializamos driver
+        driver = scrapper_functions.setup_driver()
         driver.get('https://es.wikipedia.org/wiki/Provincias_de_Argentina')
 
         # Iterar tabla de provincias
@@ -121,3 +122,45 @@ def add_info_provincia(index, provincias_arg, data_provincia, columna_df, column
         print("{} no disponible".format(columna_provincia)) if verbose else None
 
     return provincias_arg
+
+
+def get_detalle_provincias(provincias_arg, verbose=False):
+    '''
+    Obtiene información de detalle de cada una de las provincias de Argentina
+
+    :param provincias_arg: listado de provincias Argentina
+    :return: None, genera fichero .csv
+    '''
+
+    if not provincias_arg.empty:  # Se ha logrado obtener detalle de provincias
+        # Atributos a añadir del detalle provincia
+        provincias_arg["IDH"] = None
+        provincias_arg["analfabetismo"] = None
+
+        # Obtener info detallada de cada provincia
+        for index, provincia in provincias_arg.iterrows():
+            print(provincia["provincia"], index)
+            data_provincia = get_detalle_provincia(provincia['url'], verbose=verbose)
+
+            # Enriquecer con información de tabla detalle cada provincia
+            provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "IDH", "IDH (2018)")
+            provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "analfabetismo",
+                                                           "Analfabetismo")
+            provincias_arg = add_info_provincia(index, provincias_arg, data_provincia,
+                                                           "porc_pobacion_argentina", "% de la población argentina")
+            provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "autonomía",
+                                                           "Declaración de autonomía")
+            provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "altitud media",
+                                                           "• Media")
+            provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "altitud maxima",
+                                                           "• Máxima")
+            provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "altitud minima",
+                                                           "• Mínima")
+            provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "coordenadas",
+                                                           "Coordenadas")
+
+            # Esperar 5 segundos entre peticiones
+            time.sleep(5)
+
+        print(provincias_arg.head())
+        provincias_arg.to_csv("./datasets/provincias_argentina.csv", index=False)

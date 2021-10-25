@@ -1,0 +1,4 @@
+matplotlib~=3.3.4
+selenium~=3.141.0
+pandas~=1.2.2
+webdriver_manager
