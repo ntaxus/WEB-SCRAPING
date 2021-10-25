@@ -7,10 +7,10 @@ import requests
 #########################################################
 
 # Obtenemos listado de provincias
-#provincias_arg = provincias.get_lista_provincias()
+provincias_arg = provincias.get_lista_provincias()
 
 # Obtener detalle de cada provincia
-#provincias.get_detalle_provincias(provincias_arg)
+provincias.get_detalle_provincias(provincias_arg)
 
 
 #########################################################
