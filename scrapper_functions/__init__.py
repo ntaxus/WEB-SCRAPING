@@ -4,6 +4,11 @@ from selenium import webdriver
 
 
 def setup_driver():
+    '''
+    Inicializa driver de explorador web Selenium
+
+    :return: driver
+    '''
     s = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(s.path)
 

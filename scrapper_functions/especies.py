@@ -1,6 +1,7 @@
 import json
 import scrapper_functions
 import time
+import pandas as pd
 
 
 def get_lista_especies():
@@ -59,17 +60,30 @@ def get_datos(lista):
     #l=get_lista_especies()
     
     final=[]
-    
+
     for i in lista:
         a=get_datos_especie(i)
         
         #si la cat es "no aplicable" o "no"
         if a['categoria'] not in ['EX (Extinta)', 'NA (No Aplicable)','NE (No Evaluada)']:
             final.append(a)
-        
+
+            try: #Fichero ya existe
+                df = pd.read_csv("datasets/especies.csv", index_col="species")
+                df.loc[a["species"], "categoria"] = a["categoria"]
+                df.loc[a["species"], "datos"] = a["datos"]
+                df = df.reset_index()
+            except: # Fichero no existe, crear
+                df = pd.DataFrame(columns=["species", "categoria", "datos"])
+                df.loc[0, "species"] = a["species"]
+                df.loc[0, "categoria"] = a["categoria"]
+                df.loc[0, "datos"] = a["datos"]
+
+
+
+            df.to_csv("datasets/especies.csv", index=False)
+
+
+
         #agregar un time lapse
         time.sleep(2)
-
-    
-    with open('datasets/especies.json', 'w') as outfile:
-        json.dump(final, outfile)
