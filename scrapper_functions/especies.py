@@ -68,7 +68,7 @@ def get_datos(lista):
         if a['categoria'] not in ['EX (Extinta)', 'NA (No Aplicable)','NE (No Evaluada)']:
             final.append(a)
 
-            try: #Fichero ya existe
+            try: #Fichero ya existe, leer
                 df = pd.read_csv("datasets/especies.csv", index_col="species")
                 df.loc[a["species"], "categoria"] = a["categoria"]
                 df.loc[a["species"], "datos"] = a["datos"]
