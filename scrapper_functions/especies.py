@@ -54,22 +54,23 @@ def get_datos_especie(url):
 
 def get_datos(lista):
     """
-    Toma la lista de especies y aplica la función get_datos_especie a cada una de ellas
+    Toma la lista de especies y aplica la función get_datos_especie a cada una de ellas. Excluye aquellas en cat. "EX", "NA" y "NE".
     """
-    #l=get_lista_especies()
     
+    #creo una lista vacía 
     final=[]
     
+    #itero para cada una de las especies en la lista
     for i in lista:
         a=get_datos_especie(i)
         
-        #si la cat es "no aplicable" o "no"
+        #guardo en la lista solo si la categoría de la especie no es NA, NE o EX.
         if a['categoria'] not in ['EX (Extinta)', 'NA (No Aplicable)','NE (No Evaluada)']:
             final.append(a)
         
-        #agregar un time lapse
+        #agrego un time lapse
         time.sleep(2)
 
-    
+    #guardo en un archivo json
     with open('datasets/especies.json', 'w') as outfile:
         json.dump(final, outfile)
