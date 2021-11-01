@@ -37,7 +37,6 @@ def get_detalle_provincia(driver, url = "https://es.wikipedia.org/wiki/Provincia
     data_provincia = dict()
 
     # Inicializamos driver
-    #driver = scrapper_functions.setup_driver()
     driver.get(url)
 
     tabla_detalle = driver.find_element_by_class_name("infobox.geography.vcard")
@@ -69,11 +68,10 @@ def get_lista_provincias(driver):
 
     try:
         # Inicializamos driver
-        #driver = scrapper_functions.setup_driver()
         driver.get('https://es.wikipedia.org/wiki/Provincias_de_Argentina')
 
         # Iterar tabla de provincias
-        tabla_provincias = driver.find_element_by_class_name("wikitable.sortable.jquery-tablesorter")
+        tabla_provincias = driver.find_element_by_class_name("wikitable.sortable")
         cuerpo_tabla_provincias = tabla_provincias.find_element_by_tag_name("tbody")
         rows = cuerpo_tabla_provincias.find_elements_by_tag_name('tr')  # filas de la tabla
 
