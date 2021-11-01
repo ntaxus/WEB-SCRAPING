@@ -35,29 +35,29 @@ A continuación, inicializamos el web driver de Selenium mediante `setup_driver(
 
 - **Información provincias**: extrae y genera el .csv con la información de las provincias.
 
-```
+````python
 # Obtenemos listado de provincias
 provincias_arg = provincias.get_lista_provincias(driver)
 
 # Obtener detalle de cada provincia
 provincias.get_detalle_provincias(driver, provincias_arg)
-```
+````
 
 - **Distribución especies**: genera .json con la distribución de cada especie en Argentina.
 
-```
+````python
 # Obtenemos listado de las especies de mamíferos
 especies_arg = especies.get_lista_especies(driver)
 
 # Scraper información detallada de cada especie
 especies.get_datos(driver, especies_arg)
-```
+````
 
 - **Áreas protegidas**: descarga y genera un archivo comprimido .zip con la información georeferenciada de las áreas naturales de Argentina.
 
-```
+````python
 areas_protegidas.get_areas_protegidas()
-```
+````
 
 ## Licencia
 
