@@ -1,8 +1,6 @@
-from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 import pandas as pd
 import time
-import scrapper_functions
 
 
 def str_to_int(str):
@@ -26,7 +24,7 @@ def str_to_float(str):
     return round(float(str.replace(",", ".")), 2)
 
 
-def get_detalle_provincia(url = "https://es.wikipedia.org/wiki/Provincia_de_Buenos_Aires", verbose=False):
+def get_detalle_provincia(driver, url = "https://es.wikipedia.org/wiki/Provincia_de_Buenos_Aires", verbose=False):
     '''
     Scrapper información detallada de la provincia
 
@@ -39,7 +37,7 @@ def get_detalle_provincia(url = "https://es.wikipedia.org/wiki/Provincia_de_Buen
     data_provincia = dict()
 
     # Inicializamos driver
-    driver = scrapper_functions.setup_driver()
+    #driver = scrapper_functions.setup_driver()
     driver.get(url)
 
     tabla_detalle = driver.find_element_by_class_name("infobox.geography.vcard")
@@ -58,19 +56,20 @@ def get_detalle_provincia(url = "https://es.wikipedia.org/wiki/Provincia_de_Buen
     return data_provincia
 
 
-def get_lista_provincias():
+def get_lista_provincias(driver):
     '''
     Obtiene información básica de las provincias de Argentina.
 
     :return: dataframe con la información de cada provincia.
     '''
 
+
     provincias = pd.DataFrame(columns=["provincia", "url", "poblacion",
                                        "superficie", "densidad", "capital"])
 
     try:
         # Inicializamos driver
-        driver = scrapper_functions.setup_driver()
+        #driver = scrapper_functions.setup_driver()
         driver.get('https://es.wikipedia.org/wiki/Provincias_de_Argentina')
 
         # Iterar tabla de provincias
@@ -101,7 +100,7 @@ def get_lista_provincias():
     except NoSuchElementException:
         print("Error no se encuentra tabla provincias. Reintentando...")
         time.sleep(3)
-        return get_lista_provincias()
+        return get_lista_provincias(driver)
 
 
 def add_info_provincia(index, provincias_arg, data_provincia, columna_df, columna_provincia, verbose=False):
@@ -124,7 +123,7 @@ def add_info_provincia(index, provincias_arg, data_provincia, columna_df, column
     return provincias_arg
 
 
-def get_detalle_provincias(provincias_arg, verbose=False):
+def get_detalle_provincias(driver, provincias_arg, verbose=False):
     '''
     Obtiene información de detalle de cada una de las provincias de Argentina
 
@@ -140,7 +139,7 @@ def get_detalle_provincias(provincias_arg, verbose=False):
         # Obtener info detallada de cada provincia
         for index, provincia in provincias_arg.iterrows():
             print(provincia["provincia"], index)
-            data_provincia = get_detalle_provincia(provincia['url'], verbose=verbose)
+            data_provincia = get_detalle_provincia(driver, provincia['url'], verbose=verbose)
 
             # Enriquecer con información de tabla detalle cada provincia
             provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "IDH", "IDH (2018)")
