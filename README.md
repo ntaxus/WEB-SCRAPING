@@ -23,6 +23,22 @@ El programa genera los siguientes conjuntos de datos:
 2. ***especies.json***: Información georeferenciada de la distribución de los mamíferos de Argentina, junto con el nombre científico y su categoría de conservación.
 3. ***areas_protegidas.zip***: Información georeferenciada de la extensión de las áreas protegidas de Argentina. Debido al tamaño de los archivos GIS, se han troceado en tres partes, de forma que tras su carga se pueda hacer un merge de las diferentes áreas.
 
+## Ejecución del programa
+
+Existen dos formas de ejecutar el programa, en función de si se quiere emplear proxy o no. En caso de que se quiera utilizar,
+es necesario pasar al ejecutar el programa una o más direcciones _IP:puerto_, como en el siguiente ejemplo:
+````commandline
+python main.py 80.59.199.212:8080 80.59.199.213:8080
+````
+
+Si no se quiere configura una dirección proxy, simplemente llamamos al _main.py_
+````commandline
+python main.py
+````
+
+Es necesario asegurar que las direcciones proxy que se facilitan tienen salida a internet, ya que si no el webdriver no
+podrá conectar.
+
 ## Explicación main.py
 
 En primer lugar se importa la librería ``scrapper_functions`` que permite capturar la información y generar los diferentes conjuntos de datos:
@@ -31,7 +47,8 @@ En primer lugar se importa la librería ``scrapper_functions`` que permite captu
 from scrapper_functions import especies, provincias, areas_protegidas, setup_driver
 ````
 
-A continuación, inicializamos el web driver de Selenium mediante `setup_driver()`. Una vez incializado, podemos ir llamando a las diferentes arañas:
+A continuación, inicializamos el web driver de Selenium mediante `setup_driver()`, a la cual se le puede pasar por 
+parámetros una dirección IP y un puerto que actúen como proxy. Una vez inicializado, vamos llamando a las diferentes arañas:
 
 - **Información provincias**: extrae y genera el .csv con la información de las provincias.
 

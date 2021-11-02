@@ -1,7 +1,13 @@
 from scrapper_functions import especies, provincias, areas_protegidas, setup_driver
+import sys
+
+direcciones_ip = sys.argv
 
 # Inicializamos el webdriver
-driver = setup_driver()
+if len(direcciones_ip) >= 2:  # Con PROXY si se IP pasa al ejecutar programa
+    driver = setup_driver(PROXY=direcciones_ip[1])
+else:  # Sin proxy
+    driver = setup_driver()
 
 #########################################################
 # PROVINCIAS ARGENTINA
@@ -13,6 +19,9 @@ provincias_arg = provincias.get_lista_provincias(driver)
 # Obtener detalle de cada provincia
 provincias.get_detalle_provincias(driver, provincias_arg)
 
+# Inicializamos otro driver con nueva IP si se pasa más de una IP al programa
+if len(direcciones_ip) >= 3:
+    driver = setup_driver(PROXY=direcciones_ip[2])
 
 #########################################################
 # DISTRIBUCIÓN ESPECIES
