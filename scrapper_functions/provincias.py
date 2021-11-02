@@ -92,6 +92,9 @@ def get_lista_provincias(driver):
                                             "poblacion": poblacion,
                                             "densidad": densidad,
                                             "capital": capital}, ignore_index=True)
+            
+            # imprimo la provincia
+            print(provincia)
 
         return provincias
 
