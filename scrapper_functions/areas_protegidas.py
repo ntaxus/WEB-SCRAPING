@@ -1,6 +1,7 @@
 import requests
 import zipfile
 import os
+import shutil
 
 
 def crear_zip(path, ziph):
@@ -72,3 +73,6 @@ def get_areas_protegidas():
         zipf = zipfile.ZipFile('datasets/areas_protegidas.zip', 'w', zipfile.ZIP_DEFLATED)
         crear_zip('datasets/areas_protegidas/', zipf)
         zipf.close()
+        
+        #elimino el directorio
+        shutil.rmtree('datasets/areas_protegidas/')
