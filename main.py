@@ -1,6 +1,17 @@
 from scrapper_functions import especies, provincias, areas_protegidas, setup_driver
 import sys
 
+# creamos un directorio donde se guardarán los datasets
+
+dirName = 'datasets'
+
+if not os.path.exists(dirName):
+    os.mkdir(dirName)
+    print("El fichero" , dirName ,  "ha sido creado.")
+else:    
+    print("El fichero" , dirName ,  "ya existe")
+
+
 direcciones_ip = sys.argv
 
 # Inicializamos el webdriver
