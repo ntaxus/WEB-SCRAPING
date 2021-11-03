@@ -47,6 +47,18 @@ En primer lugar se importa la librería ``scrapper_functions`` que permite captu
 from scrapper_functions import especies, provincias, areas_protegidas, setup_driver
 ````
 
+Luego se crea una carpera "datasets" donde se guardarán los datos descargados:
+````python
+dirName = 'datasets'
+
+if not os.path.exists(dirName):
+    os.mkdir(dirName)
+    print("El fichero" , dirName ,  "ha sido creado.")
+else:    
+    print("El fichero" , dirName ,  "ya existe")
+````
+
+
 A continuación, inicializamos el web driver de Selenium mediante `setup_driver()`, a la cual se le puede pasar por 
 parámetros una dirección IP y un puerto que actúen como proxy. Una vez inicializado, vamos llamando a las diferentes arañas:
 
