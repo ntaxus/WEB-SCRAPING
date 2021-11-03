@@ -1,8 +1,9 @@
 from scrapper_functions import especies, provincias, areas_protegidas, setup_driver
 import sys
+import os
+
 
 # creamos un directorio donde se guardarán los datasets
-
 dirName = 'datasets'
 
 if not os.path.exists(dirName):
@@ -12,9 +13,10 @@ else:
     print("El fichero" , dirName ,  "ya existe")
 
 
+
+# Inicializamos el webdriver teniendo en cuenta si se pasa IP para proxy
 direcciones_ip = sys.argv
 
-# Inicializamos el webdriver
 if len(direcciones_ip) >= 2:  # Con PROXY si se IP pasa al ejecutar programa
     driver = setup_driver(PROXY=direcciones_ip[1])
 else:  # Sin proxy
