@@ -59,6 +59,12 @@ def get_areas_protegidas():
                 # Leer zipfile descargado
                 with zipfile.ZipFile(file_name, "r") as nested_zipObj:
                     nested_zipObj.extractall(ruta_dest)
+                
+                # cerramos el archivo
+                nested_zipObj.close()
+                
+                # eliminamos el .zip
+                os.remove(file_name)	
 
                 i += 1
 
