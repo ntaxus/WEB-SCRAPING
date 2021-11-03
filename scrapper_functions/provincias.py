@@ -146,8 +146,6 @@ def get_detalle_provincias(driver, provincias_arg, verbose=False):
             provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "IDH", "IDH (2018)")
             provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "analfabetismo",
                                                            "Analfabetismo")
-            provincias_arg = add_info_provincia(index, provincias_arg, data_provincia,
-                                                           "porc_pobacion_argentina", "% de la población argentina")
             provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "autonomía",
                                                            "Declaración de autonomía")
             provincias_arg = add_info_provincia(index, provincias_arg, data_provincia, "altitud media",
